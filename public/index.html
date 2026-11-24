@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이주현 | 자기소개</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="#home" class="logo">JH</a>
+    <nav>
+      <a href="#about">소개</a>
+      <a href="#projects">프로젝트</a>
+      <a href="#contact">연락처</a>
+      <a href="#guestbook">방명록</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Home -->
+    <section id="home" class="hero">
+      <p class="eyebrow">Hanyang Univ. ERICA</p>
+      <h1>안녕하세요,<br />이주현입니다.</h1>
+      <p class="lead">아이디어를 기획하고, 화면으로 만들고, 팀과 함께 완성하는 걸 좋아합니다.</p>
+      <a href="#projects" class="btn">프로젝트 보기</a>
+    </section>
+
+    <!-- 소개 -->
+    <section id="about">
+      <h2>소개</h2>
+      <p>
+        한양대학교 ERICA에 재학 중입니다. 제품 기획부터 앱 화면 흐름 설계, 구현까지
+        직접 해 보며 사용자가 실제로 쓰기 편한 서비스를 만드는 데 관심이 있습니다.
+      </p>
+      <ul class="tags">
+        <li>서비스 기획</li>
+        <li>UI 흐름 설계</li>
+        <li>웹/앱 개발</li>
+        <li>GitHub 협업</li>
+        <li>AWS</li>
+      </ul>
+    </section>
+
+    <!-- 프로젝트 -->
+    <section id="projects">
+      <h2>프로젝트</h2>
+      <div class="cards">
+        <article class="card">
+          <span class="period">2026.09 ~ 진행 중</span>
+          <h3>막차 역산 서비스</h3>
+          <p>목적지 기준으로 지하철 막차를 거꾸로 계산해 언제 출발해야 하는지 알려주는 앱. 화면 흐름 설계와 구현, 팀 GitHub 협업을 맡았습니다.</p>
+        </article>
+        <article class="card">
+          <span class="period">2026.09.10 ~ 09.21</span>
+          <h3>2026 정부광고 아이디어 공모전</h3>
+          <p>공익 광고 아이디어 기획, 제안서 작성, 시안 제작에 참여했습니다.</p>
+        </article>
+        <article class="card">
+          <span class="period">2025.09.01 ~ 12.19</span>
+          <h3>스마트 멀티탭 제품 기획</h3>
+          <p>부가 기능 아이디어 기획, 외형 스케치, 기능 구성 설계를 진행했습니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 연락처 -->
+    <section id="contact">
+      <h2>연락처</h2>
+      <ul class="contact">
+        <li><span>Email</span><a href="mailto:jh5120@hanyang.ac.kr">jh5120@hanyang.ac.kr</a></li>
+        <li><span>GitHub</span><a href="https://github.com/jh5120" target="_blank" rel="noopener">github.com/jh5120</a></li>
+      </ul>
+    </section>
+
+    <!-- 방명록 -->
+    <section id="guestbook">
+      <h2>방명록</h2>
+      <form id="gb-form">
+        <input id="gb-name" name="name" placeholder="이름" maxlength="30" required />
+        <textarea id="gb-message" name="message" placeholder="한마디 남겨주세요" maxlength="500" rows="3" required></textarea>
+        <button type="submit" class="btn">남기기</button>
+        <p id="gb-error" class="error" hidden></p>
+      </form>
+      <ul id="gb-list" class="gb-list"></ul>
+    </section>
+  </main>
+
+  <footer>© 2026 이주현 · Hosted on AWS (EC2 + RDS)</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
