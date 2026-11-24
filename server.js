@@ -22,7 +22,7 @@ app.get('/health', async (req, res) => {
 // 방명록 목록 (최신순 50개)
 app.get('/api/guestbook', async (req, res) => {
   try {
-    const [rows] = await pool.query(
+    const { rows } = await pool.query(
       'SELECT id, name, message, created_at FROM guestbook ORDER BY id DESC LIMIT 50'
     );
     res.json(rows);
@@ -45,14 +45,10 @@ app.post('/api/guestbook', async (req, res) => {
   }
 
   try {
-    // 플레이스홀더(?)로 SQL 인젝션 방지
-    const [result] = await pool.execute(
-      'INSERT INTO guestbook (name, message) VALUES (?, ?)',
+    // 파라미터 바인딩($1, $2)으로 SQL 인젝션 방지
+    const { rows } = await pool.query(
+      'INSERT INTO guestbook (name, message) VALUES ($1, $2) RETURNING id, name, message, created_at',
       [name, message]
-    );
-    const [rows] = await pool.execute(
-      'SELECT id, name, message, created_at FROM guestbook WHERE id = ?',
-      [result.insertId]
     );
     res.status(201).json(rows[0]);
   } catch (err) {
