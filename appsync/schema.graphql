@@ -1,0 +1,24 @@
+# 자기소개 웹앱 방명록 — AppSync GraphQL 스키마
+# AppSync 콘솔 > 스키마 탭에 그대로 붙여 넣고 저장
+
+type GuestbookEntry {
+  id: ID!
+  name: String!
+  message: String!
+  createdAt: AWSDateTime!
+}
+
+type Query {
+  # 최신순 방명록 (최대 50개)
+  listGuestbook(limit: Int): [GuestbookEntry!]!
+}
+
+type Mutation {
+  # 방명록 작성
+  addGuestbook(name: String!, message: String!): GuestbookEntry!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

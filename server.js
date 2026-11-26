@@ -1,60 +1,27 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const pool = require('./db');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
-app.use(express.json({ limit: '10kb' }));
+// 프론트엔드가 쓸 AppSync 주소·API 키를 .env 에서 읽어 내려줌 (키를 깃에 올리지 않기 위해)
+app.get('/config.js', (req, res) => {
+  const config = {
+    url: process.env.APPSYNC_URL || '',
+    apiKey: process.env.APPSYNC_API_KEY || '',
+  };
+  res.type('application/javascript').send(`window.APPSYNC_CONFIG = ${JSON.stringify(config)};`);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 헬스 체크 (EC2/로드밸런서 확인용) — DB 연결까지 확인
-app.get('/health', async (req, res) => {
-  try {
-    await pool.query('SELECT 1');
-    res.json({ status: 'ok', db: 'connected' });
-  } catch (err) {
-    res.status(500).json({ status: 'error', db: 'disconnected' });
-  }
-});
-
-// 방명록 목록 (최신순 50개)
-app.get('/api/guestbook', async (req, res) => {
-  try {
-    const { rows } = await pool.query(
-      'SELECT id, name, message, created_at FROM guestbook ORDER BY id DESC LIMIT 50'
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: '방명록을 불러오지 못했어요.' });
-  }
-});
-
-// 방명록 작성
-app.post('/api/guestbook', async (req, res) => {
-  const name = String(req.body?.name ?? '').trim();
-  const message = String(req.body?.message ?? '').trim();
-
-  if (!name || name.length > 30) {
-    return res.status(400).json({ error: '이름은 1~30자로 입력해 주세요.' });
-  }
-  if (!message || message.length > 500) {
-    return res.status(400).json({ error: '메시지는 1~500자로 입력해 주세요.' });
-  }
-
-  try {
-    // 파라미터 바인딩($1, $2)으로 SQL 인젝션 방지
-    const { rows } = await pool.query(
-      'INSERT INTO guestbook (name, message) VALUES ($1, $2) RETURNING id, name, message, created_at',
-      [name, message]
-    );
-    res.status(201).json(rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: '저장하지 못했어요.' });
-  }
+// 헬스 체크
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    appsyncConfigured: Boolean(process.env.APPSYNC_URL && process.env.APPSYNC_API_KEY),
+  });
 });
 
 app.listen(PORT, () => {
